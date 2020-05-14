@@ -67,5 +67,37 @@ namespace StringCalculator
 
             result.Should().Be(3);
         }
+
+        [Test]
+        public void AddMethodShouldThrowExceptionOnNegatives()
+        {
+            _stringCalculator.Invoking(y => y.Add("-1,-2"))
+                .Should().Throw<CannotAddNumbersLessThanZeroException>()
+                .WithMessage("Negative Values Not Supported: -1,-2");
+        }
+
+        [Test]
+        public void AddMethodShouldIgnoreNumbersGreaterThan1000()
+        {
+            int result = _stringCalculator.Add("1001,2");
+
+            result.Should().Be(2);
+        }
+
+        [Test]
+        public void AddMethodShouldDeclareDelimiterOfAnyLength()
+        {
+            int result = _stringCalculator.Add("//THISISTOTESANORMALTHING\n1THISISTOTESANORMALTHING2");
+
+            result.Should().Be(3);
+        }
+
+        [Test]
+        public void AddMethodShouldDeclareMultipleDelimiterOfAnyLength()
+        {
+            int result = _stringCalculator.Add("//[THISISTOTESANORMALTHING][***]\n1THISISTOTESANORMALTHING2***45");
+
+            result.Should().Be(48);
+        }
     }
 }
