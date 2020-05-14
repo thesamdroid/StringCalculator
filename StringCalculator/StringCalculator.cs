@@ -12,6 +12,7 @@ namespace StringCalculator
     public class StringCalculator : IStringCalculator
     {
         private const string DelimiterDefiner = "//";
+        private const string DelimiterDefinerDelimiter = "\n";
         private readonly IList<string> _delimiters = new List<string> {",", "\n" };
 
         public int Add(string numbers)
@@ -22,11 +23,11 @@ namespace StringCalculator
                 cleanedNumbersString = cleanedNumbersString.Remove(0, DelimiterDefiner.Length);
 
                 string newDelimiter;
-                if (cleanedNumbersString.StartsWith("\n\n"))
-                    newDelimiter = "\n";
+                if (cleanedNumbersString.StartsWith($"{DelimiterDefinerDelimiter}{DelimiterDefinerDelimiter}"))
+                    newDelimiter = DelimiterDefinerDelimiter;
                 else
                 {
-                    int indexOfFirstNewLine = cleanedNumbersString.IndexOf("\n", StringComparison.Ordinal);
+                    int indexOfFirstNewLine = cleanedNumbersString.IndexOf(DelimiterDefinerDelimiter, StringComparison.Ordinal);
                     newDelimiter = cleanedNumbersString.Substring(0, indexOfFirstNewLine);
                 }
 
@@ -34,7 +35,7 @@ namespace StringCalculator
                 _delimiters.RemoveAt(indexOfCommaDelimiter);
                 _delimiters.Add(newDelimiter);
 
-                cleanedNumbersString = cleanedNumbersString.Remove(0, newDelimiter.Length + 1);
+                cleanedNumbersString = cleanedNumbersString.Remove(0, newDelimiter.Length + DelimiterDefinerDelimiter.Length);
             }
 
 
